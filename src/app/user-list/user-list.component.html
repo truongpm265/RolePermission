@@ -1,0 +1,36 @@
+<div class="container mt-3">
+
+<div class="container d-flex justify-content-center">
+    <a 
+      class="btn btn-success" 
+      routerLinkActive="active" 
+      routerLink="/add-employee"
+      *ngIf="hasPermission('CREATE_DATA')" 
+    >
+      Add New User
+    </a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let user of users">
+            <td>{{user.username}}</td>
+            <td>{{user.email}}</td>
+            <td *ngFor="let role of user.roles">{{ role.name }}</td>
+            <td>
+                <button class="btn btn-info">Update</button>
+                <button class="btn btn-danger m-1">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
