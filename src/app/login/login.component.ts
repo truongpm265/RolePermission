@@ -22,11 +22,11 @@ export class LoginComponent implements OnInit {
     this.userService.login(loginForm.value).subscribe(
       (response: any) => {
         this.userAuthService.setRoles(response.user.roles);
+        this.userAuthService.setPermissions(response.user.roles.flatMap((role: { permissions: any[]; }) => role.permissions.map(permission => permission.name))); // Lưu permissions
         this.userAuthService.setToken(response.token);
-  
+        
         console.log('User info:', response.user);
-  
-        // Log ra danh sách permissions của người dùng
+        // Log ra permissions
         response.user.roles.forEach((role: any) => {
           console.log(`Role: ${role.name}`);
           role.permissions.forEach((permission: any) => {
@@ -34,7 +34,6 @@ export class LoginComponent implements OnInit {
           });
         });
   
-        // Điều hướng dựa trên role
         const role = response.user.roles[0].name;
         if (role === 'ADMIN') {
           this.router.navigate(['/admin']);

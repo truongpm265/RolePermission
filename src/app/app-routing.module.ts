@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { AuthGuard } from './_auth/auth.guard';
 import { UserListComponent } from './user-list/user-list.component';
+import { CreateUserComponent } from './create-user/create-user.component';
 
 const routes: Routes = [
   {path:'userList',component:UserListComponent,canActivate:[AuthGuard], data:{roles:['ADMIN','STAFF','USER']}},
@@ -14,7 +15,8 @@ const routes: Routes = [
   {path:'admin',component:AdminComponent, canActivate:[AuthGuard], data:{roles:['ADMIN']}},
   {path:'user',component:UserComponent, canActivate:[AuthGuard], data:{roles:['USER','ADMIN']}},
   {path:'login',component:LoginComponent},
-  {path:'forbidden',component:ForbiddenComponent}
+  {path:'forbidden',component:ForbiddenComponent},
+  {path:'create-user',component:CreateUserComponent,canActivate:[AuthGuard],data:{roles:['ADMIN']}}
 ];
 
 @NgModule({

@@ -42,9 +42,17 @@ export class UserService {
     return isMatch; // Return true only if a match is found
   }
 
-  getUsers(): Observable<any> {
+  getAllUsers(): Observable<any> {
     return this.httpClient.get<any>(this.PATH_OF_API+ "/users");
   }
-  
+
+  createUser(user: any): Observable<any> {
+    return this.httpClient.post(this.PATH_OF_API + "/users/create-user", user); 
+  }
+
+  deleteUser(userId: number): Observable<any> {
+    return this.httpClient.delete(`${this.PATH_OF_API}/users/delete/${userId}`,{ responseType: 'text' });  // Gọi API DELETE để xóa user
+  }
+
 
 }

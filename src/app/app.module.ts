@@ -16,6 +16,8 @@ import { AuthGuard } from './_auth/auth.guard';
 import { AuthInterceptor } from './_auth/auth.interceptor';
 import { UserService } from './_services/user.service';
 import { UserListComponent } from './user-list/user-list.component';
+import { CreateUserComponent } from './create-user/create-user.component';
+import { UpdateUserComponent } from './update-user/update-user.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { UserListComponent } from './user-list/user-list.component';
     LoginComponent,
     HeaderComponent,
     ForbiddenComponent,
-    UserListComponent
+    UserListComponent,
+    CreateUserComponent,
+    UpdateUserComponent
   ],
   imports: [
     BrowserModule,
