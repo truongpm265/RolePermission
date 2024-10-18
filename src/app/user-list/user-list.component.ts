@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { UserService } from '../_services/user.service';
 import { UserAuthService } from '../_services/user-auth.service';
 import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
@@ -11,7 +12,7 @@ import { firstValueFrom } from 'rxjs';
 export class UserListComponent {
   users: any[] = [];
   currentUserPermissions: string[] = [];
-  constructor(private userService: UserService, private userAuthService: UserAuthService) { }
+  constructor(private userService: UserService, private userAuthService: UserAuthService, private router:Router) { }
 
   ngOnInit(): void {
     this.currentUserPermissions = this.userAuthService.getPermissions();
@@ -56,5 +57,9 @@ export class UserListComponent {
         }
       );
     }
+  }
+
+  updateUser(userId: number) {
+    this.router.navigate(['/update-user', userId]);
   }
 }

@@ -27,7 +27,7 @@
             <td>{{user.email}}</td>
             <td *ngFor="let role of user.roles">{{ role.name }}</td>
             <td>
-                <button *ngIf="hasPermission('UPDATE_DATA')"  class="btn btn-info">Update</button>
+                <button *ngIf="hasPermission('UPDATE_DATA')"  (click)="updateUser(user.id)" class="btn btn-info">Update</button>
                 <button *ngIf="hasPermission('DELETE_DATA')" (click)="deleteUser(user.id)"  class="btn btn-danger m-1">Delete</button>
             </td>
         </tr>

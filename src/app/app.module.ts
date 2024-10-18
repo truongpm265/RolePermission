@@ -18,6 +18,9 @@ import { UserService } from './_services/user.service';
 import { UserListComponent } from './user-list/user-list.component';
 import { CreateUserComponent } from './create-user/create-user.component';
 import { UpdateUserComponent } from './update-user/update-user.component';
+import { AddRoleComponent } from './add-role/add-role.component';
+import { EditRoleComponent } from './edit-role/edit-role.component';
+import { RoleListComponent } from './role-list/role-list.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,10 @@ import { UpdateUserComponent } from './update-user/update-user.component';
     ForbiddenComponent,
     UserListComponent,
     CreateUserComponent,
-    UpdateUserComponent
+    UpdateUserComponent,
+    AddRoleComponent,
+    EditRoleComponent,
+    RoleListComponent
   ],
   imports: [
     BrowserModule,
