@@ -28,8 +28,6 @@ export class EditRoleComponent implements OnInit {
     this.roleService.getRoleById(this.roleId).subscribe(
       (role) => {
         this.role = role;
-
-        // Initialize permissions selection based on role's permissions
         this.permissions.forEach(permission => {
           permission.selected = this.role.permissions.some((rp: { name: any; }) => rp.name === permission.name); // Assuming permission names are used
         });
@@ -44,7 +42,6 @@ export class EditRoleComponent implements OnInit {
   loadPermissions() {
     this.roleService.getPermissions().subscribe(
       (permissions) => {
-        // Initialize permissions with a 'selected' property
         this.permissions = permissions.map(permission => ({ ...permission, selected: false }));
       },
       (error) => {

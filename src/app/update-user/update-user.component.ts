@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
 import { UserService } from '../_services/user.service';
 import { RoleService } from '../_services/role.service';
-
 
 @Component({
   selector: 'app-update-user',
@@ -11,49 +9,71 @@ import { RoleService } from '../_services/role.service';
   styleUrls: ['./update-user.component.css']
 })
 export class UpdateUserComponent implements OnInit {
-  user: any = { id: 0, username: '', password: '', email: '', roles: [] }; // Khởi tạo thông tin người dùng
-  id: number = 0; // ID người dùng
+  user: any = { username: '', email: '', password: '', roles: [] };
   roles: any[] = [];
-  selectedRole: any;
+  userId: number = 0;
+
   constructor(
+    private userService: UserService,
+    private roleService: RoleService,
     private route: ActivatedRoute,
-    private userService: UserService,  
-    private router: Router,
-    private roleService: RoleService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id']; // Lấy ID từ route
-    this.userService.getUserById(this.id).subscribe(data => {
-      this.user = data; // Gán thông tin người dùng
-      this.selectedRole = this.user.roles[0]; // Gán vai trò đầu tiên cho vai trò đã chọn
-    });
+    this.userId = this.route.snapshot.params['id'];
+    this.loadRoles(); // Load roles first
+    this.loadUser(); // Then load the user
+  }
 
-    this.roleService.getAllRoles().subscribe(
-      (roles) => {
-        this.roles = roles; // Gán danh sách vai trò
+  loadUser() {
+    this.userService.getUserById(this.userId).subscribe(
+      (user) => {
+        this.user = user;
+        // Đánh dấu các vai trò đã được chọn
+        this.roles.forEach(role => {
+          role.selected = this.user.roles.some((ur: { id: any; }) => ur.id === role.name); 
+        });
       },
       (error) => {
-        console.log('Error fetching roles:', error);
+        console.error('Error fetching user:', error);
+        alert('Could not load user details. Please try again later.');
       }
     );
   }
+  loadRoles() {
+  this.roleService.getRoles().subscribe(
+    (roles) => {
+      this.roles = roles;
+    },
+    (error) => {
+      console.error('Error fetching roles:', error);
+      alert('Could not load roles. Please try again later.');
+    }
+  );
+}
 
-  onSubmit(): void {
-    console.log('Updating user with ID:', this.id);
-    console.log('User data to be sent:', this.user); // Log user data
-
-    this.userService.updateUser(this.id, this.user).subscribe(
-        (data) => {
-            this.user = data;
-            this.router.navigate(['/userList']);
-        },
-        (error) => {
-            console.error('Error updating user:', error); // Log the error
-            alert('Error updating user: ' + error); // Show alert with error
-        }
+  onSubmit() {
+    // Lấy danh sách role names từ các role đã chọn
+    const selectedRoleNames = this.user.roles.map((role: { name: string; }) => role.name);
+  
+    const userToUpdate = {
+      username: this.user.username,
+      email: this.user.email,
+      password: this.user.password,
+      roles: selectedRoleNames 
+    };
+  
+    this.userService.updateUser(this.userId, userToUpdate).subscribe(
+      (response) => {
+        console.log('User updated successfully:', response);
+        this.router.navigate(['/userList']);
+      },
+      (error) => {
+        console.error('Error updating user:', error);
+        alert('An error occurred while updating the user. Please try again later.');
+      }
     );
+  }
+  
 }
-
-}
-

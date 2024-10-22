@@ -39,5 +39,10 @@ export class RoleService {
   deleteRole(roleId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/roles/${roleId}`);
   }
+
+  getRoles(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/roles/get-all`); // Assuming you have an endpoint to get permissions
+  }
   
+
 }

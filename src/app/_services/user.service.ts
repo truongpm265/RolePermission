@@ -52,12 +52,9 @@ export class UserService {
   }
 
 
-  updateUser(id: number, user: any): Observable<any> {
-    return this.httpClient.put(`${this.PATH_OF_API}/users/update/${id}`, user)
-        .pipe(
-            catchError(this.handleError) // Ensure you catch errors here
-        );
-}
+  updateUser(id: number, user: any): Observable<void> {
+    return this.httpClient.put<void>(`${this.PATH_OF_API}/users/update/${id}`, user)
+  }
 
   private handleError(error: HttpErrorResponse) {
     // Log the error to the console

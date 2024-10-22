@@ -1,7 +1,7 @@
 <div class="container">
   <h2>Role List</h2>
   <a [routerLink]="['/add-role']" class="btn btn-success">Add New Role</a>
-  <table class="table">
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>Role Name</th>
@@ -17,7 +17,7 @@
         <!-- <td *ngFor="let permission of role.permissions">{{ permission.name }}</td> -->
         <td>
           <a [routerLink]="['/roles/edit', role.name]" class="btn btn-primary">Edit</a>
-          <button (click)="deleteRole(role.name)" class="btn btn-danger">Delete</button>
+          <button (click)="deleteRole(role.name)" class="btn btn-danger m-1">Delete</button>
         </td>
       </tr>
     </tbody>
