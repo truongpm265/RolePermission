@@ -1,49 +1,57 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserAuthService } from '../_services/user-auth.service';
 import { UserService } from '../_services/user.service';
+import { AuthService } from '../_services/auth.service';
+import { UserDetails } from '../models/user-details.model';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
-  constructor(
-    private userService: UserService,
-    private userAuthService: UserAuthService,
-    private router: Router
-  ) {}
+export class LoginComponent {
+  loginForm: FormGroup;
+  errorMessage: string | null = null;
 
-  ngOnInit(): void {}
 
-  login(loginForm: NgForm) {
-    this.userService.login(loginForm.value).subscribe(
-      (response: any) => {
-        this.userAuthService.setRoles(response.user.roles);
-        this.userAuthService.setPermissions(response.user.roles.flatMap((role: { permissions: any[]; }) => role.permissions.map(permission => permission.name))); // Lưu permissions
-        this.userAuthService.setToken(response.token);
-        
-        console.log('User info:', response.user);
-        // Log ra permissions
-        response.user.roles.forEach((role: any) => {
-          console.log(`Role: ${role.name}`);
-          role.permissions.forEach((permission: any) => {
-            console.log(`Permission: ${permission.name}`);
-          });
-        });
-  
-        const role = response.user.roles[0].name;
-        if (role === 'ADMIN') {
-          this.router.navigate(['/admin']);
-        } else {
-          this.router.navigate(['/user']);
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+    this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+  }
+
+  onSubmit(): void {
+    if (this.loginForm.valid) {
+      const { username, password } = this.loginForm.value;
+      this.authService.login(username, password).subscribe(
+        response => {
+          localStorage.setItem('token', response.token);
+          console.log(response)
+          this.authService.getUserDetails().subscribe(
+            (userDetails: UserDetails) => {
+                // Lưu trữ thông tin người dùng
+                localStorage.setItem('username', userDetails.username);
+                localStorage.setItem('roles', JSON.stringify(userDetails.roles));
+                localStorage.setItem('functions', JSON.stringify(userDetails.functions));
+                // Chuyển hướng theo vai trò
+                if (userDetails.roles.includes('ADMIN')) {
+                    this.router.navigate(['/admin']);
+                } else {
+                    this.router.navigate(['/user']);
+                }
+            },
+            error => {
+                this.errorMessage = 'Failed to retrieve user details';
+            }
+        );
+    },
+        error => {
+          this.errorMessage = 'Invalid username or password';
         }
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+      );
+    }
   }
 }

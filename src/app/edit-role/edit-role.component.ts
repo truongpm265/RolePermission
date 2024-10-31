@@ -25,18 +25,18 @@ export class EditRoleComponent implements OnInit {
   }
 
   loadRole() {
-    this.roleService.getRoleById(this.roleId).subscribe(
-      (role) => {
-        this.role = role;
-        this.permissions.forEach(permission => {
-          permission.selected = this.role.permissions.some((rp: { name: any; }) => rp.name === permission.name); // Assuming permission names are used
-        });
-      },
-      (error) => {
-        console.error('Error fetching role:', error);
-        alert('Could not load role details. Please try again later.');
-      }
-    );
+    // this.roleService.getRoleById(this.roleId).subscribe(
+    //   (role) => {
+    //     this.role = role;
+    //     this.permissions.forEach(permission => {
+    //       permission.selected = this.role.permissions.some((rp: { name: any; }) => rp.name === permission.name); // Assuming permission names are used
+    //     });
+    //   },
+    //   (error) => {
+    //     console.error('Error fetching role:', error);
+    //     alert('Could not load role details. Please try again later.');
+    //   }
+    // );
   }
 
   loadPermissions() {

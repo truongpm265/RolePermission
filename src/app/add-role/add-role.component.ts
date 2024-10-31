@@ -2,6 +2,9 @@
 import { Component, OnInit } from '@angular/core';
 import { RoleService } from '../_services/role.service';
 import { Router } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AppFunction } from '../models/app-function.model';
+import { Role } from '../models/role.model';
 
 @Component({
   selector: 'app-add-role',
@@ -9,45 +12,61 @@ import { Router } from '@angular/router';
   styleUrls: ['./add-role.component.css']
 })
 export class AddRoleComponent implements OnInit {
-  role: any = { name: '', description: '', permissions: [] };
-  permissions: any[] = [];
+  roleForm: FormGroup;
+  functions: AppFunction[] = [];
 
-  constructor(private roleService: RoleService, private router: Router) {}
+  constructor(
+    private roleService: RoleService,
+    // private functionService: AppFunctionService,
+    private fb: FormBuilder,
+    private router: Router
+  ) {
+    this.roleForm = this.fb.group({
+      name: ['', Validators.required],
+      description: [''],
+      functions: this.fb.array([]) // holds selected functions
+    });
+  }
 
   ngOnInit(): void {
-    this.loadPermissions();
+    this.loadFunctions();
   }
 
-  loadPermissions() {
-    this.roleService.getPermissions().subscribe(
-      (permissions) => {
-        this.permissions = permissions.map(permission => ({ ...permission, selected: false })); // Initialize `selected` property
-      },
-      (error) => {
-        console.error('Error fetching permissions:', error);
-        alert('Could not load permissions. Please try again later.');
-      }
-    );
+  loadFunctions(): void {
+    this.roleService.getFunction().subscribe((data) => {
+      this.functions = data;
+    });
+  }
+  onFunctionChange(event: any, func: AppFunction): void {
+    const functionsFormArray = this.roleForm.get('functions') as FormArray;
+    if (event.target.checked) {
+      // Add the function if it's checked
+      functionsFormArray.push(this.fb.control(func));
+    } else {
+      // Remove the function if it's unchecked
+      const index = functionsFormArray.controls.findIndex(x => x.value.id === func.id);
+      functionsFormArray.removeAt(index);
+    }
   }
 
-  onSubmit() {
-
-    const selectedPermissions = this.permissions.filter(p => p.selected).map(p => p.name); 
-  
-    const roleToCreate = {
-      ...this.role,
-      permissions: selectedPermissions,
-    };
-  
-    this.roleService.createRole(roleToCreate).subscribe(
-      (response) => {
-        console.log('Role created successfully:', response);
-        this.router.navigate(['/roles']); 
-      },
-      (error) => {
-        console.error('Error creating role:', error);
-        alert('An error occurred while creating the role. Please try again later.');
-      }
-    );
+  onSubmit(): void {
+    if (this.roleForm.valid) {
+      const selectedFunctions = this.roleForm.value.functions.map((func: AppFunction) => func.id);
+      const newRole = {
+        ...this.roleForm.value,
+        functions: selectedFunctions
+      };
+      
+      this.roleService.createRole(newRole).subscribe({
+        next: (createdRole) => {
+          console.log('Role created:', createdRole);
+          this.roleForm.reset();
+          this.router.navigate(['/roles']);
+        },
+        error: (err) => {
+          console.error('Error creating role:', err);
+        }
+      });
+    }
   }
 }

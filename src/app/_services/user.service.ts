@@ -3,34 +3,41 @@ import { Injectable } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { UserAuthService } from './user-auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
-
+import { AuthService } from './auth.service';
 // Define a User interface for better type safety
 export interface User {
   id?: number;
   username: string;
   email: string;
   password: string;
-  roles?: any[]; // Adjust according to your role structure
+  roles?: any[]; 
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+
+  userFunctions: Set<string> = new Set();
   private readonly PATH_OF_API = "http://localhost:8080";
   private requestHeader = new HttpHeaders({
     "No-Auth": "True" // Consider applying this only for login if needed
   });
 
-  constructor(private httpClient: HttpClient, private userAuthService: UserAuthService) { }
+  constructor(private httpClient: HttpClient, private userAuthService: UserAuthService, private authService: AuthService) { }
 
   public login(loginData: NgForm): Observable<any> {
     return this.httpClient.post(`${this.PATH_OF_API}/auth/log-in`, loginData, { headers: this.requestHeader });
   }
 
   public roleMatch(allowedRoles: string[]): boolean {
-    const userRoles = this.userAuthService.getRoles();
-    return userRoles.some(role => allowedRoles.includes(role.name));
+    const userRoles = this.authService.getUserRoles();
+    return userRoles.some(role => allowedRoles.includes(role));
+  }
+  
+  public functionMatch(allowedFunctions: string[]): boolean {
+    const userFunctions = this.authService.getUserFunctions();
+    return userFunctions.some(func => allowedFunctions.includes(func));
   }
 
   getAllUsers(): Observable<User[]> {
@@ -46,7 +53,6 @@ export class UserService {
   }
 
 
-
   getUserById(id: number): Observable<User> {
     return this.httpClient.get<User>(`${this.PATH_OF_API}/users/${id}`);
   }
@@ -55,19 +61,10 @@ export class UserService {
   updateUser(id: number, user: any): Observable<void> {
     return this.httpClient.put<void>(`${this.PATH_OF_API}/users/update/${id}`, user)
   }
-
-  private handleError(error: HttpErrorResponse) {
-    // Log the error to the console
-    console.error('An error occurred:', error);
-
-    // If the error is client-side or network error
-    if (error.error instanceof ErrorEvent) {
-      return throwError('Something bad happened; please try again later.');
-    } else {
-      // Server-side error
-      const errorMsg = error.error.message || error.message || 'An unknown error occurred.';
-      console.error('Server returned code:', error.status, 'with body:', error.error);
-      return throwError(errorMsg);
-    }
+  getUserFunctions(): string[] {
+    const functions = localStorage.getItem('functions');
+    return functions ? JSON.parse(functions) : [];
   }
+
+
 }

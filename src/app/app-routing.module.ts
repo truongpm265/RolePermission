@@ -12,19 +12,21 @@ import { UpdateUserComponent } from './update-user/update-user.component';
 import { AddRoleComponent } from './add-role/add-role.component';
 import { EditRoleComponent } from './edit-role/edit-role.component';
 import { RoleListComponent } from './role-list/role-list.component';
+import { AppFunctionsComponent } from './app-functions/app-functions.component';
 
 const routes: Routes = [
-  {path:'userList',component:UserListComponent,canActivate:[AuthGuard], data:{roles:['ADMIN','STAFF','USER']}},
+  {path:'userList',component:UserListComponent,canActivate:[AuthGuard]},
   {path:'home',component:HomeComponent},
   {path:'admin',component:AdminComponent, canActivate:[AuthGuard], data:{roles:['ADMIN']}},
-  {path:'user',component:UserComponent, canActivate:[AuthGuard], data:{roles:['USER','ADMIN']}},
+  {path:'user',component:UserComponent, canActivate:[AuthGuard], data:{roles:['USER']}},
   {path:'login',component:LoginComponent},
   {path:'forbidden',component:ForbiddenComponent},
-  {path:'create-user',component:CreateUserComponent,canActivate:[AuthGuard],data:{roles:['ADMIN']}},
-  {path:'update-user/:id',component:UpdateUserComponent,canActivate:[AuthGuard],data:{roles:['ADMIN']}},
+  {path:'create-user',component:CreateUserComponent,canActivate:[AuthGuard]},
+  {path:'update-user/:id',component:UpdateUserComponent,canActivate:[AuthGuard]},
   {path:'add-role', component: AddRoleComponent},
   {path:'roles/edit/:id', component: EditRoleComponent },
-  {path:'roles',component:RoleListComponent,canActivate:[AuthGuard],data:{roles:['ADMIN']}}
+  {path:'roles',component:RoleListComponent,canActivate:[AuthGuard]},
+  {path:'functions', component:AppFunctionsComponent, canActivate:[AuthGuard]}
 ];
 
 @NgModule({

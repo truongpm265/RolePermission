@@ -1,0 +1,89 @@
+<!-- src/app/components/app-functions/app-functions.component.html -->
+<div class="container mt-5">
+    <h2 class="mb-4">Manage Functions</h2>
+  
+    <!-- Form for Adding New Function -->
+    <div class="card mb-4">
+      <div class="card-header">Add New Function</div>
+      <div class="card-body">
+        <form [formGroup]="functionForm" (ngSubmit)="addFunction()">
+          <div class="mb-3">
+            <label for="name" class="form-label">Function Name:</label>
+            <input
+              id="name"
+              formControlName="name"
+              class="form-control"
+              placeholder="Enter function name"
+            />
+            <div
+              *ngIf="functionForm.get('name')?.invalid && functionForm.get('name')?.touched"
+              class="text-danger"
+            >
+              Function name is required.
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="functionForm.invalid"
+          >
+            Add Function
+          </button>
+        </form>
+      </div>
+    </div>
+  
+    <!-- List of Functions and Permission Editing -->
+    <div class="card">
+      <div class="card-header">Select and Edit Function Permissions</div>
+      <div class="card-body">
+        <div *ngFor="let func of functions" class="d-flex align-items-center mb-2">
+          <input
+            type="radio"
+            name="selectedFunction"
+            class="form-check-input me-2"
+            (change)="selectFunction(func)"
+          />
+          <label class="form-check-label flex-grow-1">{{ func.name }}</label>
+          <button
+            (click)="deleteRole(func.id)"
+            class="btn btn-sm btn-danger"
+          >
+            Delete
+          </button>
+        </div>
+  
+        <div *ngIf="selectedFunction" class="mt-4">
+          <h4>Edit Permissions for {{ selectedFunction.name }}</h4>
+          <form [formGroup]="functionForm" (ngSubmit)="updateFunction()">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th>Permission Name</th>
+                    <th>Select</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let permission of permissions">
+                    <td>{{ permission.name }}</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        (change)="onPermissionChange($event, permission.name)"
+                        [checked]="selectedPermissions.has(permission.name)"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <button type="submit" class="btn btn-success mt-2">
+              Update Function
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

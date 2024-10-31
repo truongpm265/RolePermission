@@ -21,6 +21,8 @@ import { UpdateUserComponent } from './update-user/update-user.component';
 import { AddRoleComponent } from './add-role/add-role.component';
 import { EditRoleComponent } from './edit-role/edit-role.component';
 import { RoleListComponent } from './role-list/role-list.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AppFunctionsComponent } from './app-functions/app-functions.component';
 
 @NgModule({
   declarations: [
@@ -36,14 +38,16 @@ import { RoleListComponent } from './role-list/role-list.component';
     UpdateUserComponent,
     AddRoleComponent,
     EditRoleComponent,
-    RoleListComponent
+    RoleListComponent,
+    AppFunctionsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthGuard,

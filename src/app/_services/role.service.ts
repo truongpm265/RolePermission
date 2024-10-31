@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Role } from '../models/role.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,38 +12,34 @@ export class RoleService {
 
   constructor(private http: HttpClient) { }
 
-  
-  getRoleById(id: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/roles/${id}`);
+
+  getRoles(): Observable<Role[]> {
+    return this.http.get<Role[]>(`${this.baseUrl}/roles/get-all`);
   }
-  getRoleByName(name: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/roles/${name}`);
+
+  createRole(role: Role): Observable<Role> {
+    return this.http.post<Role>(`${this.baseUrl}/roles/create`, role);
   }
+  getRoleByName(name: string): Observable<Role> {
+    return this.http.get<Role>(`${this.baseUrl}/roles/${name}`);
+  }
+  updateRole(name: string, role: Role): Observable<Role> {
+    return this.http.put<Role>(`${this.baseUrl}/roles/update/${name}`, role);
+  }
+
+  deleteRole(name: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/roles/${name}`);
+  }
+
 
   getPermissions(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/permissions`); // Assuming you have an endpoint to get permissions
   }
 
-  // Method to create a new role
-  createRole(role: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/roles/create`, role);
+  getFunction(): Observable<any[]>{
+    return  this.http.get<any[]>(`${this.baseUrl}/functions/get-all`);
   }
 
-  updateRole(id: string, role: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/roles/update/${id}`, role);
-  }
 
-  getAllRoles(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/roles/get-all`); 
-  }
-
-  deleteRole(roleId: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/roles/${roleId}`);
-  }
-
-  getRoles(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/roles/get-all`); // Assuming you have an endpoint to get permissions
-  }
-  
 
 }

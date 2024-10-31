@@ -59,6 +59,14 @@ export class UserAuthService {
     return [];
   }
 
+  public getFunctions(): string[]{
+    if (isPlatformBrowser(this.platformId)) {
+      const functions = localStorage.getItem('functions');
+      return functions ? JSON.parse(functions) : [];
+    }
+    return [];
+  }
+
   public clear() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.clear();
