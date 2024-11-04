@@ -18,9 +18,13 @@ export class UserListComponent {
   @ViewChild('excelFileInput') excelFileInput!: ElementRef;
   users: any[] = [];
   roles: any[] = [];
+  pagedUsers: any[] = [];
+  currentPage: number = 1; 
+  itemsPerPage: number = 5;
   currentUserPermissions: string[] = [];
   searchRequest: UserSearchRequest = {};
-  constructor(private userService: UserService, 
+Math: any;
+  constructor(public userService: UserService, 
     private userAuthService: UserAuthService, 
     private router:Router, 
     private http: HttpClient,
@@ -123,6 +127,25 @@ export class UserListComponent {
     this.roleService.getRoles().subscribe((data: any[]) => {
       this.roles = data; // Giả sử data là danh sách các vai trò
     });
+  }
+
+  updatePagedUsers() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.pagedUsers = this.users.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  nextPage() {
+    if (this.currentPage < Math.ceil(this.users.length / this.itemsPerPage)) {
+      this.currentPage++;
+      this.updatePagedUsers();
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagedUsers();
+    }
   }
   
 }

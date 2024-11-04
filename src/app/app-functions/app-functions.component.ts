@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppFunctionService } from '../_services/app-function.service';
 import { AppFunction } from '../models/app-function.model';
 import { Permission } from '../models/user-details.model';
+import { UserService } from '../_services/user.service';
 
 @Component({
   selector: 'app-app-functions',
@@ -19,7 +20,8 @@ export class AppFunctionsComponent {
   
   constructor(
     private fb: FormBuilder,
-    private functionService: AppFunctionService
+    private functionService: AppFunctionService,
+    public userService:UserService
   ) {
     this.functionForm = this.fb.group({
       name: ['', Validators.required],

@@ -1,6 +1,6 @@
 <div class="container">
   <h2>Role List</h2>
-  <a [routerLink]="['/add-role']" class="btn btn-success">Add New Role</a>
+  <a [routerLink]="['/add-role']" class="btn btn-success" *ngIf="userService.permissionMatch(['CREATE_ROLE'])">Add New Role</a>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -16,8 +16,8 @@
         <td>{{ role.description }}</td>
         <!-- <td *ngFor="let permission of role.permissions">{{ permission.name }}</td> -->
         <td>
-          <a [routerLink]="['/roles/edit', role.name]" class="btn btn-primary">Edit</a>
-          <button (click)="deleteRole(role.name)" class="btn btn-danger m-1">Delete</button>
+          <a [routerLink]="['/roles/edit', role.name]" class="btn btn-primary" *ngIf="userService.permissionMatch(['EDIT_ROLE'])">Edit</a>
+          <button (click)="deleteRole(role.name)" class="btn btn-danger m-1" *ngIf="userService.permissionMatch(['DELETE_ROLE'])">Delete</button>
         </td>
       </tr>
     </tbody>

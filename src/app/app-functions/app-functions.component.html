@@ -26,7 +26,7 @@
             type="submit"
             class="btn btn-primary"
             [disabled]="functionForm.invalid"
-          >
+            *ngIf="userService.permissionMatch(['CREATE_FUNCTION'])">
             Add Function
           </button>
         </form>
@@ -48,7 +48,7 @@
           <button
             (click)="deleteRole(func.id)"
             class="btn btn-sm btn-danger"
-          >
+            *ngIf="userService.permissionMatch(['DELETE_FUNCTION'])">
             Delete
           </button>
         </div>
@@ -78,7 +78,8 @@
                 </tbody>
               </table>
             </div>
-            <button type="submit" class="btn btn-success mt-2">
+            <button type="submit" class="btn btn-success mt-2"
+            *ngIf="userService.permissionMatch(['EDIT_FUNCTION'])">
               Update Function
             </button>
           </form>

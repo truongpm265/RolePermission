@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { RoleService } from '../_services/role.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Role } from '../models/role.model';
+import { UserService } from '../_services/user.service';
 
 @Component({
   selector: 'app-role-list',
@@ -13,7 +14,7 @@ export class RoleListComponent implements OnInit {
   roles: any[] = [];
   roleForm: FormGroup<any>;
 
-  constructor(private roleService: RoleService, private fb: FormBuilder) {
+  constructor(private roleService: RoleService, private fb: FormBuilder, public userService:UserService) {
     this.roleForm = this.fb.group({
       name: ['', Validators.required],
       description: [''],

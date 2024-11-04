@@ -25,6 +25,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppFunctionsComponent } from './app-functions/app-functions.component';
 import { SearchComponent } from './search/search.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     HttpClientModule,
     RouterModule,
     ReactiveFormsModule,
+    NgxPaginationModule,
   ],
   providers: [
     AuthGuard,

@@ -11,7 +11,7 @@
         <div class="col-sm-3">
             <label for="role" class="form-label">Role:</label>
             <select id="role" class="form-control" [(ngModel)]="searchRequest.role" name="role">
-                <option value="">Select a role</option> <!-- Tùy chọn mặc định -->
+                <option value="">All Roles</option> <!-- Tùy chọn mặc định -->
                 <option *ngFor="let role of roles" [value]="role.name">{{ role.name }}</option> <!-- Giả sử mỗi role có id và name -->
             </select>
         </div>
@@ -28,7 +28,7 @@
                 class="btn btn-success" 
                 routerLinkActive="active" 
                 routerLink="/create-user"
-            >
+                *ngIf="userService.permissionMatch(['CREATE_USER'])">
                 Add New User
             </a>
         </div>
@@ -52,7 +52,7 @@
             <button 
                 class="btn btn-primary" 
                 (click)="triggerFileInputClick()"
-            >
+                *ngIf="userService.permissionMatch(['CREATE_USER'])">
                 Import Excel File
             </button>
         </div>
@@ -60,23 +60,30 @@
     
     <table class="table table-striped mt-3">
         <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>Actions</th>
-            </tr>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+          </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let user of users">
-                <td>{{user.username}}</td>
-                <td>{{user.email}}</td>
-                <td *ngFor="let role of user.roles">{{ role.name }}</td>
-                <td>
-                    <button (click)="updateUser(user.id)" class="btn btn-info">Update</button>
-                    <button (click)="deleteUser(user.id)" class="btn btn-danger m-1">Delete</button>
-                </td>
-            </tr>
+          <tr *ngFor="let user of users | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td *ngFor="let role of user.roles">{{ role.name }}</td>
+            <td>
+              <button (click)="updateUser(user.id)" class="btn btn-info" *ngIf="userService.permissionMatch(['EDIT_USER'])">Update</button>
+              <button (click)="deleteUser(user.id)" class="btn btn-danger m-1" *ngIf="userService.permissionMatch(['DELETE_USER'])">Delete</button>
+            </td>
+          </tr>
         </tbody>
-    </table>
+      </table>
+      
+      <div class="container mt-3">
+        <div class="d-flex justify-content-center">
+          <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+        </div>
+      </div>
+
 </div>

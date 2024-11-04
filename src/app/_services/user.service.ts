@@ -40,6 +40,10 @@ export class UserService {
     const userFunctions = this.authService.getUserFunctions();
     return userFunctions.some(func => allowedFunctions.includes(func));
   }
+  public permissionMatch(allowedPermissions: string[]): boolean {
+    const userPermissions = this.authService.getPermissions();
+    return userPermissions.some(permissions => allowedPermissions.includes(permissions));
+  }
 
   getAllUsers(): Observable<User[]> {
     return this.httpClient.get<User[]>(`${this.PATH_OF_API}/users`);

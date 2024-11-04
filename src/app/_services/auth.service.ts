@@ -39,16 +39,13 @@ export class AuthService {
     return [];
   }
 
-  getPermissions(): Observable<Permission[]> {
-    return new Observable<Permission[]>((observer) => {
-      this.getUserDetails().subscribe(
-        (userDetails: UserDetails) => {
-          observer.next(userDetails.functions.flatMap(func => func.permissions));
-          observer.complete();
-        },
-        (error) => observer.error(error)
-      );
-    });
+  getPermissions(): string[] {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.permissions || [];
+    }
+    return [];
   }
 
   getUserFunctions(): string[] {
