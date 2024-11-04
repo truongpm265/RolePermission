@@ -55,16 +55,6 @@ export class RoleListComponent implements OnInit {
     }
   }
 
-  // loadRoles(): void {
-  //   this.roleService.getAllRoles().subscribe(
-  //     (data) => {
-  //       this.roles = data;
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching roles:', error);
-  //     }
-  //   );
-  // }
 
   deleteRole(roleId: string): void {
     if (confirm('Are you sure you want to delete this role?')) {

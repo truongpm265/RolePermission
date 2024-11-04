@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { UserAuthService } from './user-auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
+import { UserSearchRequest } from '../search/search.component';
 // Define a User interface for better type safety
 export interface User {
   id?: number;
@@ -66,5 +67,8 @@ export class UserService {
     return functions ? JSON.parse(functions) : [];
   }
 
+  searchUsers(request: UserSearchRequest): Observable<User[]> {
+    return this.httpClient.post<User[]>(`${this.PATH_OF_API}/users/search`, request);
+  }
 
 }

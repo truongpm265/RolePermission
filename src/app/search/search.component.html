@@ -1,0 +1,20 @@
+<form (ngSubmit)="searchUsers()" class="form-inline container">
+    <div class="row mb-3 align-items-end"> <!-- Căn chỉnh các input ở dưới cùng -->
+      <div class="col-sm-3"> <!-- Điều chỉnh kích thước cột cho Name -->
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" id="name" class="form-control" [(ngModel)]="searchRequest.name" name="name" />
+      </div>
+      <div class="col-sm-3"> <!-- Điều chỉnh kích thước cột cho Email -->
+        <label for="email" class="form-label">Email:</label>
+        <input type="text" id="email" class="form-control" [(ngModel)]="searchRequest.email" name="email" />
+      </div>
+      <div class="col-sm-3"> <!-- Điều chỉnh kích thước cột cho Role -->
+        <label for="role" class="form-label">Role:</label>
+        <input type="text" id="role" class="form-control" [(ngModel)]="searchRequest.role" name="role" />
+      </div>
+      <div class="col-sm-3"> <!-- Cột cho nút tìm kiếm -->
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </div>
+  </form>
+  

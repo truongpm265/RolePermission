@@ -1,8 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { UserService } from '../_services/user.service';
 import { UserAuthService } from '../_services/user-auth.service';
 import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { UserSearchRequest } from '../search/search.component';
+import { RoleService } from '../_services/role.service';
+
+
 
 @Component({
   selector: 'app-user-list',
@@ -10,11 +15,21 @@ import { Router } from '@angular/router';
   styleUrl: './user-list.component.css'
 })
 export class UserListComponent {
+  @ViewChild('excelFileInput') excelFileInput!: ElementRef;
   users: any[] = [];
+  roles: any[] = [];
   currentUserPermissions: string[] = [];
-  constructor(private userService: UserService, private userAuthService: UserAuthService, private router:Router) { }
+  searchRequest: UserSearchRequest = {};
+  constructor(private userService: UserService, 
+    private userAuthService: UserAuthService, 
+    private router:Router, 
+    private http: HttpClient,
+    private roleService: RoleService
+
+  ) { }
 
   ngOnInit(): void {
+    this.loadRoles();
     this.currentUserPermissions = this.userAuthService.getPermissions();
     this.loadEmployees();
     this.userService.getAllUsers().subscribe((data: any[]) => {
@@ -62,4 +77,52 @@ export class UserListComponent {
   updateUser(userId: number) {
     this.router.navigate(['/update-user', userId]);
   }
+
+  triggerFileInputClick(): void {
+    this.excelFileInput.nativeElement.click();
+  }
+
+  importExcelFile(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.uploadExcelFile(file);
+    }
+  }
+
+  uploadExcelFile(file: File): void {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    this.http.post('http://localhost:8080/excel/import', formData, { responseType: 'text' })
+      .subscribe({
+        next: (response) => {
+          console.log('File uploaded and processed successfully:', response);
+          alert("File uploaded and processed successfully!");
+          this.getAllUsers();
+          this.router.navigate(['/userList']); 
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Error uploading file:', error.message);
+          alert("An error occurred while uploading the file. Please try again.");
+        }
+      });
+  }
+
+  searchUsers(): void {
+    this.userService.searchUsers(this.searchRequest).subscribe({
+      next: (users) => {
+        this.users = users; // Cập nhật danh sách người dùng với kết quả tìm kiếm
+      },
+      error: (err) => {
+        console.error('Error searching users', err);
+      }
+    });
+  }
+  loadRoles(): void {
+    this.roleService.getRoles().subscribe((data: any[]) => {
+      this.roles = data; // Giả sử data là danh sách các vai trò
+    });
+  }
+  
 }

@@ -27,6 +27,11 @@ export class CreateUserComponent implements OnInit {
       );
     }
   }
-
+  addUser() {
+    // Logic để thêm người dùng
+    console.log("User added!");
+    // Sử dụng type assertion để cho TypeScript biết rằng modal() là một phương thức hợp lệ
+    ($('#addUserModal') as any).modal('hide'); // Sử dụng type assertion
+}
  
 }

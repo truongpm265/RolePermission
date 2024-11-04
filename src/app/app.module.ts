@@ -23,6 +23,8 @@ import { EditRoleComponent } from './edit-role/edit-role.component';
 import { RoleListComponent } from './role-list/role-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppFunctionsComponent } from './app-functions/app-functions.component';
+import { SearchComponent } from './search/search.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,8 @@ import { AppFunctionsComponent } from './app-functions/app-functions.component';
     AddRoleComponent,
     EditRoleComponent,
     RoleListComponent,
-    AppFunctionsComponent
+    AppFunctionsComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,7 @@ import { AppFunctionsComponent } from './app-functions/app-functions.component';
     FormsModule,
     HttpClientModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [
     AuthGuard,
@@ -56,7 +59,8 @@ import { AppFunctionsComponent } from './app-functions/app-functions.component';
       useClass:AuthInterceptor,
       multi:true
     },
-    UserService
+    UserService,
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })
