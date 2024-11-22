@@ -1,0 +1,83 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Send Email</h4>
+          </div>
+          <div class="card-body">
+            <form (ngSubmit)="sendEmail()" #emailForm="ngForm">
+              <!-- Email To -->
+              <div class="form-group mb-3">
+                <label for="to" class="form-label">Recipient Email</label>
+                <input
+                  type="email"
+                  id="to"
+                  class="form-control"
+                  placeholder="Enter recipient email"
+                  [(ngModel)]="email.to"
+                  name="to"
+                  required
+                />
+                <div class="invalid-feedback d-block" *ngIf="emailForm.submitted && !emailForm.controls['to']?.valid">
+                  Please provide a valid email address.
+                </div>
+              </div>
+  
+              <!-- Subject -->
+              <div class="form-group mb-3">
+                <label for="subject" class="form-label">Subject</label>
+                <input
+                  type="text"
+                  id="subject"
+                  class="form-control"
+                  placeholder="Enter subject"
+                  [(ngModel)]="email.subject"
+                  name="subject"
+                  required
+                />
+                <div class="invalid-feedback d-block" *ngIf="emailForm.submitted && !emailForm.controls['subject']?.valid">
+                  Please provide a subject.
+                </div>
+              </div>
+  
+              <!-- Message -->
+              <div class="form-group mb-3">
+                <label for="text" class="form-label">Message</label>
+                <textarea
+                  id="text"
+                  class="form-control"
+                  placeholder="Enter your message here"
+                  rows="5"
+                  [(ngModel)]="email.text"
+                  name="text"
+                  required
+                ></textarea>
+                <div class="invalid-feedback d-block" *ngIf="emailForm.submitted && !emailForm.controls['text']?.valid">
+                  Please provide a message.
+                </div>
+              </div>
+  
+              <!-- Submit Button -->
+              <div class="form-group">
+                <button
+                  type="submit"
+                  class="btn btn-primary w-100"
+                  [disabled]="emailForm.invalid"
+                >
+                  Send Email
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Success/Failure Message -->
+        <div *ngIf="responseMessage" class="alert mt-3" [ngClass]="{'alert-success': isSuccess, 'alert-danger': !isSuccess}">
+            {{ responseMessage }}
+          </div>
+          
+      </div>
+    </div>
+    
+  </div>
+  

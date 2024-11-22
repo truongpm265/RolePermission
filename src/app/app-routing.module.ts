@@ -13,6 +13,7 @@ import { AddRoleComponent } from './add-role/add-role.component';
 import { EditRoleComponent } from './edit-role/edit-role.component';
 import { RoleListComponent } from './role-list/role-list.component';
 import { AppFunctionsComponent } from './app-functions/app-functions.component';
+import { EmailComponent } from './email/email.component';
 
 const routes: Routes = [
   {path:'userList',component:UserListComponent,canActivate:[AuthGuard]},
@@ -26,7 +27,8 @@ const routes: Routes = [
   {path:'add-role', component: AddRoleComponent},
   {path:'roles/edit/:id', component: EditRoleComponent },
   {path:'roles',component:RoleListComponent,canActivate:[AuthGuard]},
-  {path:'functions', component:AppFunctionsComponent, canActivate:[AuthGuard]}
+  {path:'functions', component:AppFunctionsComponent, canActivate:[AuthGuard]},
+  { path: 'send-email', component: EmailComponent },
 ];
 
 @NgModule({

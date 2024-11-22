@@ -26,6 +26,7 @@ import { AppFunctionsComponent } from './app-functions/app-functions.component';
 import { SearchComponent } from './search/search.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { EmailComponent } from './email/email.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     EditRoleComponent,
     RoleListComponent,
     AppFunctionsComponent,
-    SearchComponent
+    SearchComponent,
+    EmailComponent
   ],
   imports: [
     BrowserModule,
